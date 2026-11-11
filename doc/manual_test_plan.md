@@ -70,7 +70,15 @@ After one invalid submission, reopen the panel and verify the last saved valid v
 
 With B online in A's guild and its non-empty family name known, have B send a message in each available relevant channel: Guild, Say, Yell, Whisper, Party, Raid, and a custom channel.
 
-**Expected:** The speaker label uses the saved pattern and preserves the exact capitalization of the saved family name; the message body is unchanged. The label keeps the color Blizzard would normally use for B. If A sees a message before learning B's family name, that existing line stays unchanged after discovery; only later messages use the formatted label. Empty or unavailable family names leave the original name unformatted.
+**Expected:** Speaker labels use the saved pattern and preserve exact capitalization; message bodies and Blizzard colors remain unchanged. If A sees a message before learning B's family name, that existing line stays unchanged after discovery; only later messages use the formatted label.
+
+### MT-17: Dedicated Whisper Tabs
+
+1. Enable the Blizzard setting that opens incoming whispers in dedicated tabs.
+2. With B's non-empty family name cached, have B whisper A.
+3. Reply from the dedicated tab and verify both directions in the same tab.
+
+**Expected:** Incoming and outgoing whisper labels use the configured family-name pattern, messages appear in the correct dedicated tab, and replying still targets B's original character.
 
 ### MT-07: Custom Display Pattern
 
@@ -177,3 +185,4 @@ With B shown under a family-formatted label in chat or the guild roster:
 | MT-14 |  |  |
 | MT-15 |  |  |
 | MT-16 |  |  |
+| MT-17 |  |  |

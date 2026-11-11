@@ -16,7 +16,7 @@
 - **DISPLAY-009** Family names shall be displayed in all relevant chat messages, regardless of channel.
 - **DISPLAY-010** Family names shall be displayed in guild chat and guild login/logout notifications.
 - **DISPLAY-011** Family names shall be displayed in party and raid chat messages when the author's name has a non-empty cache entry.
-- **DISPLAY-012** Family names shall be displayed in Say, Yell, Whisper, and other relevant chat channels when the author's name has a non-empty cache entry.
+- **DISPLAY-012** Family names shall be displayed in Say, Yell, Whisper, and other relevant chat channels when the author's name has a non-empty cache entry. Dedicated whisper tabs shall continue routing messages by the original Blizzard character identity.
 - **DISPLAY-013** Family names shall be displayed in guild roster entries whenever the member's name has a non-empty cache entry, regardless of online status.
 - **DISPLAY-014** The default Blizzard chat UI and guild roster shall be the primary compatibility targets.
 - **DISPLAY-015** The character selection screen, friends list, party frames, and raid frames are outside the display scope.

@@ -6,6 +6,7 @@ local rosterSnapshot
 local rosterFrameHooked
 local guildUIEventFrame
 local playerLinkWrapped
+local whisperRoutingHooksInstalled
 
 local chatEvents = {
     "CHAT_MSG_SAY",
@@ -49,7 +50,42 @@ local function ensurePlayerLinkTargetMapping()
     playerLinkWrapped = true
 end
 
-local function filterPlayerMessage(_, _, message, author, ...)
+local function ensureWhisperRoutingHooks()
+    if whisperRoutingHooksInstalled or type(_G.FCFManager_ShouldSuppressMessage) ~= "function" then
+        return
+    end
+
+    local originalShouldSuppressMessage = _G.FCFManager_ShouldSuppressMessage
+    _G.FCFManager_ShouldSuppressMessage = function(chatFrame, chatGroup, chatTarget, ...)
+        if chatGroup == "WHISPER" and type(chatTarget) == "string" then
+            chatTarget = displayNameToOriginalName[string.lower(chatTarget)] or chatTarget
+        end
+        return originalShouldSuppressMessage(chatFrame, chatGroup, chatTarget, ...)
+    end
+
+    if type(_G.FCFManager_ShouldSuppressMessageFlash) == "function" then
+        local originalShouldSuppressMessageFlash = _G.FCFManager_ShouldSuppressMessageFlash
+        _G.FCFManager_ShouldSuppressMessageFlash = function(chatFrame, chatGroup, chatTarget, ...)
+            if chatGroup == "WHISPER" and type(chatTarget) == "string" then
+                chatTarget = displayNameToOriginalName[string.lower(chatTarget)] or chatTarget
+            end
+            return originalShouldSuppressMessageFlash(chatFrame, chatGroup, chatTarget, ...)
+        end
+    end
+
+    if type(_G.ChatEdit_SetLastTellTarget) == "function" then
+        local originalSetLastTellTarget = _G.ChatEdit_SetLastTellTarget
+        _G.ChatEdit_SetLastTellTarget = function(target, chatType, ...)
+            if type(target) == "string" then
+                target = displayNameToOriginalName[string.lower(target)] or target
+            end
+            return originalSetLastTellTarget(target, chatType, ...)
+        end
+    end
+    whisperRoutingHooksInstalled = true
+end
+
+local function filterPlayerMessage(chatFrame, event, message, author, ...)
     if type(message) ~= "string" or type(author) ~= "string" or author == "" then
         return false
     end
@@ -64,6 +100,19 @@ local function filterPlayerMessage(_, _, message, author, ...)
     local characterName = author:match("^([^%-]+)")
     local label = addon.FormatDisplayName(characterName, familyName)
     displayNameToOriginalName[string.lower(label)] = author
+    if event == "CHAT_MSG_WHISPER" or event == "CHAT_MSG_WHISPER_INFORM" then
+        ensureWhisperRoutingHooks()
+        local authorKey = string.lower(author)
+        local targetKey = chatFrame.chatTarget and string.lower(chatFrame.chatTarget)
+        if chatFrame.privateMessageList
+            and (chatFrame.privateMessageList[authorKey] or chatFrame.privateMessageList[targetKey]) then
+            chatFrame.privateMessageList[string.lower(label)] = true
+        end
+        if chatFrame.excludePrivateMessageList
+            and (chatFrame.excludePrivateMessageList[authorKey] or chatFrame.excludePrivateMessageList[targetKey]) then
+            chatFrame.excludePrivateMessageList[string.lower(label)] = true
+        end
+    end
     ensurePlayerLinkTargetMapping()
     local trailingArguments = {...}
     return false, message, label, unpack(trailingArguments, 1, select("#", ...))

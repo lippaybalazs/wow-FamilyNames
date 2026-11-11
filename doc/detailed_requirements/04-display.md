@@ -17,7 +17,7 @@ Each requirement below cites its source customer requirements.
 ## Chat
 
 - **DR-DISPLAY-010** In supported chat messages, the addon shall apply the family-name label whenever a non-empty cache entry exists for the author, regardless of guild membership or online state. [Source: SCOPE-002, VIS-001, VIS-002, DISPLAY-009, DISPLAY-011, DISPLAY-012]
-- **DR-DISPLAY-011** The chat transformation shall apply to player-authored messages shown in the default Blizzard chat UI, in any channel, when the author is identifiable. Messages without an identifiable player author shall remain unchanged. [Source: DISPLAY-009, DISPLAY-010, DISPLAY-011, DISPLAY-012, DISPLAY-017]
+- **DR-DISPLAY-011** The chat transformation shall apply to player-authored messages shown in the default Blizzard chat UI, in any supported channel, when the author is identifiable. Dedicated whisper-window routing shall continue to resolve to the original Blizzard character identity. [Source: DISPLAY-009, DISPLAY-010, DISPLAY-011, DISPLAY-012, DISPLAY-017]
 - **DR-DISPLAY-012** For an author with no cache entry or an empty cached family name, the addon shall leave the original Blizzard character name as the displayed label. [Source: DISPLAY-006, DISPLAY-007]
 - **DR-DISPLAY-013** Once a chat message has been displayed, the addon shall not change that message retroactively. A discovered or changed family name shall affect only subsequently displayed messages. [Source: DISPLAY-016, SYNC-017, SYNC-018]
 

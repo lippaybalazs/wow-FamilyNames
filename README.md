@@ -10,6 +10,7 @@ A World of Warcraft addon that adds a family name to character labels in chat an
 - Broadcasts use guild addon messages and do not appear as visible chat.
 - Received values are saved locally in a persistent cache keyed by Blizzard character name. New broadcasts replace only that character's cached value.
 - Cached names can appear in chat, the guild roster and member details, presence notices, and group-invitation labels, even if the character is offline or no longer in the guild.
+- Whisper labels use the family-name pattern while dedicated tabs continue routing to the original Blizzard character.
 - If a character has no cached value, Blizzard's original name remains visible until a broadcast arrives.
 - If a character's name matches the family name (case-insensitive), it is displayed only once. Other characters continue to use the configured pattern.
 
