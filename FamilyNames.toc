@@ -1,0 +1,7 @@
+## Interface: 70300
+## Title: Family Names
+## Notes: Account-wide family names
+## Author: YourName
+## Version: 0.1
+
+Core.lua
