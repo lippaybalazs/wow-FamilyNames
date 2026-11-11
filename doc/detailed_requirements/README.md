@@ -1,4 +1,4 @@
-# Detailed Requirements (Draft)
+# Detailed Requirements
 
 This folder is a draft decomposition of the customer requirements in [Customer Requirements](../customer_requirements/README.md). It is intended to make implementation and verification possible without selecting internal code structures, APIs, or algorithms.
 
