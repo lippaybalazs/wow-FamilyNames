@@ -5,25 +5,27 @@
 - **SYNC-001** Family names shall be shared exclusively between members of the same guild.
 - **SYNC-002** A character shall announce its current family name when it logs in.
 - **SYNC-003** A family-name change shall be announced immediately to online guild members.
-- **SYNC-004** Received family names shall be stored temporarily in memory.
-- **SYNC-005** Characters on the same WoW account shall use the locally stored account-wide family name; the value shall not need to be transferred between those characters through guild messaging.
-- **SYNC-006** When a character logs in, the addon shall request family names from all currently online guild members.
-- **SYNC-007** When a character joins a guild while already online, the join shall be treated as a login for synchronization: the character shall announce its own family name to the new guild and request the family names of all currently online guild members.
-- **SYNC-008** An online character shall respond to requests for its own family name.
+- **SYNC-004** Each receiver shall persist an unlimited local cache mapping Blizzard character names to their latest received family names, including empty values.
+- **SYNC-005** The configured family name shall remain account-wide and local. The character currently logged in shall broadcast that value under its own character name; other characters on the account shall broadcast it when they log in.
+- **SYNC-006** A logged-in character shall broadcast its current family name to its current guild every five minutes.
+- **SYNC-007** When a character joins a guild while online, it shall immediately broadcast its current family name to that guild.
+- **SYNC-008** Synchronization shall be one-way broadcast only. Receiving a family-name broadcast shall not trigger a response.
 
-## On-Demand Discovery and Retries
+## Cache Lookup and Broadcast Timing
 
-- **SYNC-009** If the addon needs to display a guild member's family name and does not know it, the addon shall request it.
-- **SYNC-010** A family-name request shall be considered unanswered if no response is received within one minute.
-- **SYNC-011** Repeated requests for the same character shall be spaced at least one minute apart.
-- **SYNC-012** If no response is received, the original Blizzard character name shall be displayed.
-- **SYNC-013** An unsuccessful request shall be retried once per minute, up to five total request attempts, including the initial request.
-- **SYNC-014** The maximum polling-attempt count shall be five total attempts per queried character.
-- **SYNC-015** The polling-attempt limit for a queried character shall reset when that character logs in again.
-- **SYNC-016** When the local character logs in, polling-attempt limits shall reset for all queried characters.
+- **SYNC-009** Chat and roster display shall look up the Blizzard character name in the local cache. If no value exists, the original Blizzard name shall remain displayed until a broadcast is received.
+- **SYNC-010** A character shall send its first broadcast when it logs in and repeat broadcasts every five minutes while logged in.
+- **SYNC-011** Saving a changed family name shall trigger an immediate broadcast without waiting for the periodic interval.
+- **SYNC-012** Missing cache values shall not start an on-demand request.
+- **SYNC-013** The addon shall not retry requests because it shall not send family-name requests.
+- **SYNC-014** The five-minute broadcast shall be the only periodic synchronization mechanism.
+- **SYNC-015** A later broadcast from a character shall replace that character's cached value.
+- **SYNC-016** Login shall load the persisted cache; it shall not clear previously received values.
 
 ## Update Semantics
 
 - **SYNC-017** A newly received family name shall overwrite the previously known value; timestamps and version comparisons are not required.
-- **SYNC-018** When a character changes its family name, it shall share the new value with online guild members. Each receiving member shall get the update directly from that character, not indirectly through a third character.
-- **SYNC-019** An empty family name shall be announced and stored as a valid known value and shall not trigger further discovery requests.
+- **SYNC-018** When a character changes its family name, it shall broadcast the new value directly to online members of its current guild.
+- **SYNC-019** An empty family name shall be broadcast and stored as a valid known value.
+- **SYNC-020** Family-name broadcasts shall use WoW addon messaging routed to the current guild and shall not be sent as visible chat messages.
+- **SYNC-021** When local data is reset, the addon shall clear the persistent character cache, retain an empty account-wide family name, and not request or fetch other values immediately. Later broadcasts shall repopulate the cache.

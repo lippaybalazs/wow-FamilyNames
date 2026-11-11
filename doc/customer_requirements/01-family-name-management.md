@@ -14,9 +14,12 @@
 - **NAME-007** A family name may be empty.
 - **NAME-008** An empty family name shall be valid, announced, and treated as a known value, but shall not be displayed.
 - **NAME-009** A character with the addon and no configured family name shall use an empty string (`""`) as its default family name.
-- **NAME-010** A non-empty family name shall have a maximum length of 50 Unicode code points after NFC normalization.
-- **NAME-011** A family name shall consist of Unicode letters, with combining marks permitted only as part of a letter. Single spaces, hyphens (`-`), straight apostrophes (`'`), and right curly apostrophes (`’`) may be used between letter sequences. Names shall not begin or end with a separator or contain adjacent separators. Numbers, other punctuation, symbols, and control or formatting characters shall not be allowed.
-- **NAME-012** Accented characters and non-Latin writing systems, including Chinese, shall be supported.
-- **NAME-013** Input shall not require uppercase characters. Family names shall be converted to uppercase when displayed.
+- **NAME-010** A non-empty family name shall have a maximum length of 50 characters.
+- **NAME-011** A non-empty family name shall start with an uppercase ASCII letter (`A-Z`) and contain only ASCII letters (`A-Z`, `a-z`).
+- **NAME-012** Accented characters and non-Latin writing systems are not supported.
+- **NAME-013** The addon shall preserve the capitalization entered after the required uppercase first letter and shall display it without further case conversion.
 - **NAME-014** The account-wide family name shall be stored on the local computer and read on each character login.
 - **NAME-015** If a submitted family name is invalid, the addon shall show an error and shall not save or announce the invalid value. The previously saved valid value, if any, shall remain in effect.
+- **NAME-016** The family-name Save button shall be disabled when the settings panel opens and whenever the input matches the saved value. Editing the input to a different value shall enable the button.
+- **NAME-017** After a valid family name is saved, the input shall display the saved value and the Save button shall be disabled. If saving fails validation, the error shall be shown, the edited input shall be retained, and the Save button shall remain enabled.
+- **NAME-018** The settings panel shall provide a reset button that, after confirmation, clears the saved family name, received character cache, and custom display pattern, then restores the empty-name and default-pattern values.

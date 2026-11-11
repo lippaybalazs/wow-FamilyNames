@@ -1,13 +1,13 @@
 # Visibility and Guild Membership
 
-- **VIS-001** Before displaying a character's family name, the addon shall verify that the character belongs to the currently logged-in character's guild.
-- **VIS-002** In ordinary displays, family names shall be displayed only for currently online members of the current guild. The logout notification exception is defined in VIS-005 and VIS-011.
-- **VIS-003** These guild-membership and online-status restrictions shall apply to every supported display location: chat and the guild roster.
-- **VIS-004** Friends outside the guild shall not have family names displayed.
+- **VIS-001** The addon shall display a family name whenever the Blizzard character name has a non-empty entry in the local cache, regardless of current guild membership or online status.
+- **VIS-002** A cache entry alone shall determine family-name display eligibility; the addon shall not require the character to be online or in the current guild.
+- **VIS-003** This cache-based eligibility shall apply consistently to all supported display locations, including chat, guild roster, member details, presence notifications, and group invitations.
+- **VIS-004** Characters outside the guild may have their family names displayed when their names are present in the local cache.
 - **VIS-005** Guild login notifications shall include family names where available. In a guild logout notification, the displayed member name in the "has gone offline" message shall include the family name known immediately before the member went offline, where available.
-- **VIS-006** An offline character shall retain its original Blizzard display name in all displays except its own logout notification, which may include the family name known immediately before logout.
-- **VIS-007** A family name may remain in memory after its character logs out, but shall not be displayed while the character is offline.
-- **VIS-008** When a character comes online again, it shall announce its family name again so the locally known value is updated.
-- **VIS-009** The addon shall always check current guild membership before displaying a family name. Information retained from a previous guild shall not be displayed to members of another guild.
-- **VIS-010** After a character's logout notification has been handled, the addon shall ignore that offline character and shall not request, update, or otherwise use its family name until the character comes online again.
-- **VIS-011** The family-name logout notification described in VIS-005 is the sole exception to the online-only visibility requirements.
+- **VIS-006** An offline character shall use its cached family name in supported displays when the cache contains a non-empty value.
+- **VIS-007** Cached family names shall remain available for display after their character logs out or leaves a guild.
+- **VIS-008** When a character broadcasts an updated family name, the receiver shall replace that character's cached value.
+- **VIS-009** The addon shall not check current guild membership before displaying a cached family name. Entries learned from a previous guild shall remain displayable.
+- **VIS-010** The addon shall continue to use a cached value after the character logs out; only a later broadcast or local cache reset shall change or remove it.
+- **VIS-011** There shall be no online-only or logout-only exception to cache-based visibility.

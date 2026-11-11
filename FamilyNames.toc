@@ -3,5 +3,9 @@
 ## Notes: Account-wide family names
 ## Author: YourName
 ## Version: 0.1
+## SavedVariables: FamilyNamesDB
 
+NameRules.lua
 Core.lua
+Options.lua
+Display.lua

@@ -1,5 +1,33 @@
 
 {
     "$schema": "https://raw.githubusercontent.com/LuaLS/vscode-lua/master/setting/schema.json",
-    "workspace.checkThirdParty": false
+    "workspace.checkThirdParty": false,
+    "runtime.version": "Lua 5.1",
+    "diagnostics.globals": [
+        "ChatFrame_AddMessageEventFilter",
+        "ACCEPT",
+        "CANCEL",
+        "DEFAULT_CHAT_FRAME",
+        "ERR_FRIEND_OFFLINE_S",
+        "ERR_FRIEND_ONLINE_SS",
+        "FauxScrollFrame_GetOffset",
+        "GuildRoster",
+        "GuildRosterContainer",
+        "GuildRosterFrame",
+        "GuildRosterFrameScrollFrame",
+        "GuildMemberDetailFrame",
+        "GuildMemberDetailName",
+        "GetGuildRosterSelection",
+        "StaticPopupDialogs",
+        "StaticPopup_FindVisible",
+        "StaticPopup_Resize",
+        "StaticPopup_Show",
+        "STATICPOPUP_NUMDIALOGS",
+        "InterfaceOptions_AddCategory",
+        "InterfaceOptionsFramePanelContainer",
+        "RegisterAddonMessagePrefix",
+        "SendAddonMessage",
+        "UIErrorsFrame",
+        "hooksecurefunc"
+    ]
 }

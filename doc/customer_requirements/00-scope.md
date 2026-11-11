@@ -3,7 +3,7 @@
 ## Purpose
 
 - **SCOPE-001** The addon shall allow guild members to associate a family name with each of their WoW characters.
-- **SCOPE-002** Family names shall be visible only to online members of the same guild who also use the addon, except in the departing member's own logout notification.
+- **SCOPE-002** Family-name broadcasts shall be shared only with members of the sender's current guild who use the addon. Once received and cached locally, a family name may continue to be displayed regardless of either character's online status or guild membership.
 
 ## Supported Boundaries
 

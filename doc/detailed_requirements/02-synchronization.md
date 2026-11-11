@@ -1,31 +1,33 @@
 # Synchronization and Discovery
 
-Each requirement below cites its source customer requirements. The request timeout, retry interval, and maximum attempt count are specified in SYNC-010, SYNC-011, SYNC-013, and SYNC-014.
+Each requirement below cites its source customer requirements. Synchronization uses one-way announcements on login, on setting changes, and at five-minute intervals; there is no request or retry protocol.
 
 ## Announcements and Responses
 
 - **DR-SYNC-001** When the local character logs in, the addon shall announce that character's current family name to the current guild, including an empty family name. [Source: NAME-005, NAME-008, SYNC-001, SYNC-002, SYNC-019]
 - **DR-SYNC-002** When a family-name change is applied, the addon shall announce the new value to online members of the current guild without waiting for another login or discovery request. [Source: NAME-006, SYNC-001, SYNC-003]
-- **DR-SYNC-003** When the local character joins a guild while online, the addon shall announce its current value to that guild and request the values of all members reported online in that guild. [Source: SYNC-001, SYNC-006, SYNC-007]
-- **DR-SYNC-004** On login, the addon shall request values from all members reported online in the current guild. [Source: SYNC-006]
-- **DR-SYNC-005** An online addon character receiving a request shall respond with the current account-wide family name, including an empty value. [Source: NAME-003, SYNC-008, SYNC-019]
-- **DR-SYNC-006** A received announcement or response shall be associated with the character that sent it. A value from one character shall not be treated as another character's value. [Source: SCOPE-001, SYNC-001, SYNC-017, SYNC-018]
-- **DR-SYNC-007** The addon shall not forward a family-name change received from one character as though it were an update from that character; the changed character shall send its own update directly to guild members. [Source: SYNC-018]
-- **DR-SYNC-008** Guild family-name exchange shall be limited to the current guild. Characters on one account shall read their shared value from the local account-wide setting rather than transfer it through guild messaging. [Source: SYNC-001, SYNC-005, NAME-014]
+- **DR-SYNC-003** When the local character joins a guild while online, it shall immediately announce its current account-wide value to that guild. [Source: SYNC-001, SYNC-007]
+- **DR-SYNC-004** While logged in, the character shall announce its current value every five minutes. [Source: SYNC-006, SYNC-010]
+- **DR-SYNC-005** Each received announcement shall be stored under the sending Blizzard character name, independently of other characters on that account. [Source: SYNC-004, SYNC-017]
+- **DR-SYNC-006** A received value shall update only the cache entry for the character that sent it. [Source: SYNC-017, SYNC-018]
+- **DR-SYNC-007** A receiver shall not forward received values or reply to a broadcast; each character shall announce its own account-wide value. [Source: SYNC-005, SYNC-008, SYNC-018]
+- **DR-SYNC-008** Family-name broadcasts shall be limited to the current guild. [Source: SYNC-001, SYNC-020]
 
-## Discovery and Retry Behavior
+## Cache and Fallback Behavior
 
-- **DR-SYNC-009** When a family name is needed for an eligible display and the value is unknown, the addon shall request it from that character. A known empty value shall not be considered unknown and shall not cause another request. [Source: SYNC-009, SYNC-019, STORE-005]
-- **DR-SYNC-010** A request shall be considered unanswered if no matching response is received within one minute after the request is sent. [Source: SYNC-010]
-- **DR-SYNC-011** If a request is unanswered, the addon shall retry once per minute, up to five total requests per queried character, counting the initial request. [Source: SYNC-011, SYNC-013, SYNC-014]
-- **DR-SYNC-012** When a request is unanswered or its retry limit has been reached, the family name shall remain unavailable and the original Blizzard character name shall be used for display. [Source: SYNC-010, SYNC-012, SYNC-013, DISPLAY-006, DISPLAY-007]
-- **DR-SYNC-013** A later login by the queried character shall reset the attempt limit tracked for that character. [Source: SYNC-015]
-- **DR-SYNC-014** Login of the local character shall reset the attempt limits tracked for all queried characters. [Source: SYNC-016]
-- **DR-SYNC-015** The initial request shall count as the first of the five total attempts. [Source: SYNC-013, SYNC-014]
+- **DR-SYNC-009** The addon shall load its persistent character-name cache when initializing. [Source: SYNC-004, SYNC-016, STORE-001, STORE-002]
+- **DR-SYNC-010** The persistent cache shall use Blizzard character names as keys and family-name strings as values. It shall not impose a fixed capacity, eviction policy, or time-based expiration. [Source: SYNC-004, STORE-004]
+- **DR-SYNC-011** A newer announcement shall overwrite only the cache value for its sender. [Source: SYNC-015, SYNC-017]
+- **DR-SYNC-012** If a display lookup finds no cache entry, it shall use the original Blizzard character name and wait for a later broadcast; it shall not request a value. [Source: SYNC-009, SYNC-012]
+- **DR-SYNC-013** Login shall preserve previously received cache entries. [Source: SYNC-016]
+- **DR-SYNC-014** Saving a changed account-wide name shall cause an immediate broadcast. [Source: SYNC-003, SYNC-011]
+- **DR-SYNC-015** Each character shall send its current account-wide value immediately on login and resume periodic broadcasts. [Source: SYNC-002, SYNC-010]
 
 ## Received Values
 
 - **DR-SYNC-016** A newly received value shall replace the previously known value for that character, regardless of which value was sent first. The addon shall not require timestamps or version comparisons. [Source: SYNC-017]
-- **DR-SYNC-017** Received family names shall be retained only in memory and shall not be restored in a later game session. Empty values shall be retained as known values for the current session. [Source: SYNC-004, SYNC-019, STORE-001, STORE-002, STORE-005]
-- **DR-SYNC-018** The addon is not required to enforce a fixed capacity, eviction policy, or time-based expiration for received family names. [Source: STORE-004]
-- **DR-SYNC-019** When a response is received from the queried character, including a response with an empty family name, the addon shall stop retrying requests for that character until that character logs in again and its attempt limit resets. [Source: SYNC-008, SYNC-013, SYNC-015, SYNC-019]
+- **DR-SYNC-017** Received family names, including empty values, shall persist between game sessions as known cache entries. [Source: SYNC-004, SYNC-019, STORE-001, STORE-002, STORE-005]
+- **DR-SYNC-018** The cache shall have no fixed capacity or eviction policy. [Source: STORE-004]
+- **DR-SYNC-019** An empty broadcast shall overwrite the sender's previous cache value and be treated as known. [Source: SYNC-019, STORE-005]
+- **DR-SYNC-020** The addon shall send announcements through WoW addon messaging on the `GUILD` distribution and shall not use visible chat channels to synchronize family-name data. [Source: SYNC-001, SYNC-020]
+- **DR-SYNC-021** Resetting local data shall clear the persistent cache and immediately broadcast the empty account-wide family name; the cache shall repopulate only from later broadcasts. [Source: SYNC-021]

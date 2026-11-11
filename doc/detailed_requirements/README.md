@@ -17,4 +17,8 @@ This folder is a draft decomposition of the customer requirements in [Customer R
 
 ## Code-Level Decisions
 
-Implementation may choose the internal mechanisms, provided observable behavior meets these requirements. Examples include the addon communication prefix and payload encoding, event/API integration, internal data structures, timers, and how the standard Blizzard UI is hooked. The retry timeout, interval, and maximum attempt count are specified in SYNC-010, SYNC-011, SYNC-013, and SYNC-014.
+Implementation may choose the internal mechanisms, provided observable behavior meets these requirements. Examples include the addon communication prefix and payload encoding, event/API integration, internal data structures, timers, and how the standard Blizzard UI is hooked. The five-minute broadcast interval is specified in SYNC-006.
+
+## Manual Verification
+
+Use the [Manual Test Plan](../manual_test_plan.md) for the in-game 7.3.5 checks.
